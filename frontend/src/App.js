@@ -5,11 +5,19 @@ import "./App.css";
 function App() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleShorten = async () => {
+    if (!url) {
+      alert("Please enter a URL");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const response = await axios.post(
-        "http://localhost:5000/shorten",
+        "https://url-shortener-59bb.onrender.com/shorten",
         {
           originalUrl: url,
         }
@@ -19,12 +27,14 @@ function App() {
     } catch (error) {
       console.log(error);
       alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
-    alert("Copied!");
+    alert("Copied to clipboard!");
   };
 
   return (
@@ -34,13 +44,13 @@ function App() {
       <div className="input-box">
         <input
           type="text"
-          placeholder="Paste your long URL"
+          placeholder="Paste your long URL here..."
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
 
         <button onClick={handleShorten}>
-          Shorten
+          {loading ? "Loading..." : "Shorten"}
         </button>
       </div>
 
