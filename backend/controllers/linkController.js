@@ -21,7 +21,7 @@ exports.shortenUrl = async (req, res) => {
     await newLink.save();
 
     res.status(201).json({
-      shortUrl: `http://localhost:5000/${shortCode}`,
+     shortUrl: `${process.env.BASE_URL}/${shortCode}`,
     });
   } catch (error) {
     res.status(500).json({
